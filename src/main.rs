@@ -1,15 +1,27 @@
 mod scanner;
 mod token;
+pub mod token_type;
 
 use std::env;
 use std::io::{self, BufRead, BufReader, Write};
 use std::path::Path;
 use std::str;
 use std::fs;
+
 use crate::scanner::Scanner;
 
+// static mut HAD_ERROR: bool = false;
+
+// fn report(line: i32, location: &String, message: &String) {
+//     eprintln!("[line {}] Error {}: {}", line, location, message);    
+// }
+
+// fn error(line: i32, message: &String) {
+//     report(line, &String::from(""), message);
+// }
+
 fn run(source: &str) {
-   let scanner = Scanner::new(source);
+   let mut scanner = Scanner::new(source);
    let tokens = scanner.scan_tokens();
 
    for token in tokens {
@@ -50,6 +62,7 @@ fn main() {
 
     if args.len() > 2 {
         println!("Usage: lox [script]");
+        std::process::exit(64)
     } else if args.len() == 2 {
         if let Err(e) = run_file(&args[1]) {
             eprintln!("Error: {}", e);
