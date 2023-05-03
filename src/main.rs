@@ -1,15 +1,10 @@
-mod scanner;
-mod token;
-pub mod token_type;
-
 use std::env;
 use std::io::{self, BufRead, BufReader, Write};
 use std::path::Path;
 use std::str;
 use std::fs;
 
-use crate::scanner::Scanner;
-
+use lox::run;
 // static mut HAD_ERROR: bool = false;
 
 // fn report(line: i32, location: &String, message: &String) {
@@ -19,15 +14,6 @@ use crate::scanner::Scanner;
 // fn error(line: i32, message: &String) {
 //     report(line, &String::from(""), message);
 // }
-
-fn run(source: &str) {
-   let mut scanner = Scanner::new(source);
-   let tokens = scanner.scan_tokens();
-
-   for token in tokens {
-       println!("{}", token.get_lexeme());
-   }
-}
 
 fn run_prompt() -> io::Result<()> {
     let stdin = io::stdin();

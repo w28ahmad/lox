@@ -1,5 +1,5 @@
-use crate::token::Token;
-use crate::token_type::TokenType;
+use super::token::Token;
+use super::token_type::TokenType;
 
 pub struct Scanner { 
     source: String,
@@ -82,6 +82,7 @@ impl Scanner {
                     self.line += 1;
                     TokenType::NOP
                 },
+
 
                 // Unknown Character
                 _ =>  { 
