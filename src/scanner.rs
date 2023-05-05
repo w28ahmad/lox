@@ -1,6 +1,7 @@
 use super::token::Token;
 use super::token::LiteralValue;
 use super::token_type::TokenType;
+use super::keywords::KEYWORDS;
 
 pub struct Scanner { 
     source: String,
@@ -83,16 +84,23 @@ impl Scanner {
                     TokenType::NOP
                 },
 
+
+                // Meaningles characters
+                ' ' | '\r' | '\t' => TokenType::NOP,
+                '\n' => {
+                    self.line += 1;
+                    TokenType::NOP
+                },
+
                 // Digits
                 _ if c.is_digit(10) => {
                     self.number(); 
                     TokenType::NOP
                 },
 
-                // Meaningles characters
-                ' ' | '\r' | '\t' => TokenType::NOP,
-                '\n' => {
-                    self.line += 1;
+                // Alphanumeric Identifiers
+                _ if c.is_alphabetic() => {
+                    self.identifier();
                     TokenType::NOP
                 },
 
@@ -109,6 +117,14 @@ impl Scanner {
         }
     }
     
+    // Gather Identifiers
+    fn identifier(&mut self) {
+        while self.peek().is_alphanumeric() { self.advance(); }
+        let value = &self.source[self.start as usize..self.current as usize];
+        let identifier_type= (*KEYWORDS).get(&value).unwrap_or(&TokenType::Identifier);
+        self.add_token(*identifier_type);
+    }
+
     // Gather Numbers
     fn number(&mut self) {
        while self.peek().is_digit(10) {

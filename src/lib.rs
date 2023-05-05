@@ -1,6 +1,7 @@
 mod scanner;
 mod token;
 mod token_type;
+mod keywords;
 
 use crate::scanner::Scanner;
 
