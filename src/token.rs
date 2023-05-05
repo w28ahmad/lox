@@ -3,13 +3,18 @@ use crate::token_type::TokenType;
 pub struct Token { 
     token_type: TokenType,
     lexeme: String,
-    literal: Option<String>,
+    literal: Option<LiteralValue>,
     line: usize,
+}
+
+pub enum LiteralValue {
+    Number(f64),
+    Text(String),
 }
 
 impl Token {
 
-    pub fn new(token_type: TokenType, lexeme: &str, literal: Option<String>, line:usize) -> Token {
+    pub fn new(token_type: TokenType, lexeme: &str, literal: Option<LiteralValue>, line:usize) -> Token {
         Token {
             token_type,
             lexeme: lexeme.to_string(),
@@ -26,7 +31,7 @@ impl Token {
         &self.lexeme
     }
 
-    pub fn get_literal(&self) -> &Option<String> {
+    pub fn get_literal(&self) -> &Option<LiteralValue> {
         &self.literal
     }
 
@@ -35,11 +40,17 @@ impl Token {
     }
 
     pub fn to_string(&self) -> String {
+        let literal_str = match &self.literal {
+            Some(LiteralValue::Number(num)) => num.to_string(),
+            Some(LiteralValue::Text(text)) => text.clone(),
+            None => String::from(""),
+        };
+
         format!(
             "{} {} {}",
             self.token_type.to_string(),
             self.lexeme,
-            self.literal.as_ref().unwrap_or(&String::from("")),
+            literal_str,
         )
     }
 }

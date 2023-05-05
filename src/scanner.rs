@@ -1,4 +1,5 @@
 use super::token::Token;
+use super::token::LiteralValue;
 use super::token_type::TokenType;
 
 pub struct Scanner { 
@@ -75,14 +76,25 @@ impl Scanner {
                         TokenType::Slash
                     }
                 }
-                
+               
+                // Strings
+                '"' => {
+                    self.string();
+                    TokenType::NOP
+                },
+
+                // Digits
+                _ if c.is_digit(10) => {
+                    self.number(); 
+                    TokenType::NOP
+                },
+
                 // Meaningles characters
                 ' ' | '\r' | '\t' => TokenType::NOP,
                 '\n' => {
                     self.line += 1;
                     TokenType::NOP
                 },
-
 
                 // Unknown Character
                 _ =>  { 
@@ -97,13 +109,62 @@ impl Scanner {
         }
     }
     
+    // Gather Numbers
+    fn number(&mut self) {
+       while self.peek().is_digit(10) {
+           self.advance();
+       }
+
+       // check for float
+       if self.peek() == '.' && self.peek_next().is_digit(10) {
+           self.advance();
+           while self.peek().is_digit(10) { self.advance(); }
+       }
+
+        let value = self.source[self.start as usize..self.current as usize]
+            .parse::<f64>()
+            .expect("Failed to parse number");
+
+        self.add_token_with_literal(TokenType::Number, Some(LiteralValue::Number(value)));
+    }
+
+    // Peek the input after the current
+    fn peek_next(&mut self) -> char {
+        if self.current as usize + 1 >= self.source.len() { return '\0'; }
+        return self.source.chars().nth(self.current as usize + 1).unwrap();
+    }
+
+    // Gather String literals
+    fn string(&mut self) {
+        
+       while self.peek() != '"' && !self.is_at_end() {
+           if self.peek() == '\n' {
+               self.line += 1
+           }
+           self.advance();
+       }
+
+        if self.is_at_end() {
+            eprintln!("[line {}] Error: {}", self.line, "Unterminated String.");
+            std::process::exit(65);
+        }
+
+        // Find closing "
+        self.advance();
+
+        // Strip the surrounding quotes
+        let value = &self.source[self.start as usize + 1..self.current as usize - 1];
+        let value = value.to_owned();
+        self.add_token_with_literal(TokenType::String, Some(LiteralValue::Text(value)));
+    }
+
     // Look one character ahead
     fn peek(&self) -> char {
         if self.is_at_end() { return '\0' }
         return self.source.chars().nth(self.current as usize).unwrap();
     }
 
-    // Select a token depending on the next token
+    // Select a token type depending on the next token
     fn conditional_select(&mut self, next_token: char, match_type: TokenType, mismatch_type: TokenType) -> TokenType {
         if self.match_next_token(next_token) {
             return match_type;
@@ -144,7 +205,7 @@ impl Scanner {
     // Ex.
     // x = 42
     // 42 is a literal
-    fn add_token_with_literal(&mut self, token_type: TokenType, literal: Option<String>) {
+    fn add_token_with_literal(&mut self, token_type: TokenType, literal: Option<LiteralValue>) {
        let text = self.source[self.start as usize..self.current as usize].to_string();
        let token = Token::new(token_type, &text, literal, self.line);
        self.tokens.push(token);

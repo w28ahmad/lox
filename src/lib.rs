@@ -10,7 +10,7 @@ pub fn run(source: &str) -> String {
 
    let mut output = String::new();
    for token in tokens {
-       // print!("{}", token.get_lexeme());
+       print!("{}", token.get_lexeme());
        output.push_str(token.get_lexeme());
    }
 
