@@ -57,6 +57,13 @@ mod tests {
     }
 
     #[test]
+    fn keywords_test() {
+        let input = "and";
+        let expected_output = "and";
+        let output = run(input);
+        assert_eq!(input, output);
+    }
+    #[test]
     #[ignore]
     fn string_test_fail() {
         let input = "This a string";
