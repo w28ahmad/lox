@@ -4,6 +4,10 @@ use std::path::Path;
 use std::str;
 use std::fs;
 
+use ast_printer::AstPrinter;
+use expr::Expr;
+use stmt::Stmt;
+use token::{Token, TokenType};
 use lox::run;
 // static mut HAD_ERROR: bool = false;
 
@@ -43,6 +47,23 @@ fn run_file(path: &str) -> io::Result<()> {
     Ok(())
 }
 
+fn run_tests() {
+    let expression = Expr::Binary {
+        left: Box::new(Expr::Literal {
+            value: 123.0,
+        }),
+        operator: Token::new(TokenType::Plus, String::from("+"), None, 1),
+        right: Box::new(Expr::Grouping {
+            expression: Box::new(Expr::Literal {
+                value: 45.67,
+            }),
+        }),
+    };
+
+    let printer = AstPrinter::new();
+    println!("{}", printer.print(&expression));
+}
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -53,6 +74,8 @@ fn main() {
         if let Err(e) = run_file(&args[1]) {
             eprintln!("Error: {}", e);
         }
+    } else if args.len() == 1 {
+        run_tests();
     } else {
         if let Err(e) = run_prompt() {
             eprintln!("Error: {}", e);

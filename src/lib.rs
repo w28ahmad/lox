@@ -2,6 +2,9 @@ mod scanner;
 mod token;
 mod token_type;
 mod keywords;
+mod ast_printer;
+mod expr;
+mod stmt;
 
 use crate::scanner::Scanner;
 

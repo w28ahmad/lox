@@ -1,11 +1,24 @@
+use crate::token::Token;
+use crate::expr::Expr;
+
+pub struct VariableExpr {
+    pub name: Token,
+}
+
+pub struct FunctionStmt {
+    pub name: Token,
+    pub params: Vec<Token>,
+    pub body: Vec<Box<Stmt>>,
+}
+
 pub enum Stmt {
     Block {
         statements: Vec<Box<Stmt>>,
     },
     Class {
         name: Token,
-        superclass: Box<Expr::Variable>,
-        methods: Vec<Box<Stmt::Function>>,
+        superclass: Option<Box<VariableExpr>>, 
+        methods: Vec<FunctionStmt>,
     },
     Expression {
         expression: Box<Expr>,
@@ -38,15 +51,15 @@ pub enum Stmt {
 }
 
 pub trait Visitor<R> {
-    fn visit_block_stmt(&mut self, expr: &Stmt::Block) -> R;
-    fn visit_class_stmt(&mut self, expr: &Stmt::Class) -> R;
-    fn visit_expression_stmt(&mut self, expr: &Stmt::Expression) -> R;
-    fn visit_function_stmt(&mut self, expr: &Stmt::Function) -> R;
-    fn visit_if_stmt(&mut self, expr: &Stmt::If) -> R;
-    fn visit_print_stmt(&mut self, expr: &Stmt::Print) -> R;
-    fn visit_return_stmt(&mut self, expr: &Stmt::Return) -> R;
-    fn visit_var_stmt(&mut self, expr: &Stmt::Var) -> R;
-    fn visit_while_stmt(&mut self, expr: &Stmt::While) -> R;
+    fn visit_block_stmt(&mut self, expr: &Stmt) -> R;
+    fn visit_class_stmt(&mut self, expr: &Stmt) -> R;
+    fn visit_expression_stmt(&mut self, expr: &Stmt) -> R;
+    fn visit_function_stmt(&mut self, expr: &Stmt) -> R;
+    fn visit_if_stmt(&mut self, expr: &Stmt) -> R;
+    fn visit_print_stmt(&mut self, expr: &Stmt) -> R;
+    fn visit_return_stmt(&mut self, expr: &Stmt) -> R;
+    fn visit_var_stmt(&mut self, expr: &Stmt) -> R;
+    fn visit_while_stmt(&mut self, expr: &Stmt) -> R;
 }
 
 impl Stmt {

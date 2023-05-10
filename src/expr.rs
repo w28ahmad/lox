@@ -1,3 +1,18 @@
+use crate::token::Token;
+
+pub struct BinaryExpr {
+    pub left: Box<Expr>,
+    pub operator: Token,
+    pub right: Box<Expr>,
+}
+
+pub enum LiteralValue {
+    Number(f64),
+    Str(String),
+    Bool(bool),
+    Nil,
+}
+
 pub enum Expr {
     Assign {
         name: Token,
@@ -21,7 +36,7 @@ pub enum Expr {
         expression: Box<Expr>,
     },
     Literal {
-        value: Object,
+        value: LiteralValue,
     },
     Logical {
         left: Box<Expr>,
@@ -50,18 +65,18 @@ pub enum Expr {
 }
 
 pub trait Visitor<R> {
-    fn visit_assign_expr(&mut self, expr: &Expr::Assign) -> R;
-    fn visit_binary_expr(&mut self, expr: &Expr::Binary) -> R;
-    fn visit_call_expr(&mut self, expr: &Expr::Call) -> R;
-    fn visit_get_expr(&mut self, expr: &Expr::Get) -> R;
-    fn visit_grouping_expr(&mut self, expr: &Expr::Grouping) -> R;
-    fn visit_literal_expr(&mut self, expr: &Expr::Literal) -> R;
-    fn visit_logical_expr(&mut self, expr: &Expr::Logical) -> R;
-    fn visit_set_expr(&mut self, expr: &Expr::Set) -> R;
-    fn visit_super_expr(&mut self, expr: &Expr::Super) -> R;
-    fn visit_this_expr(&mut self, expr: &Expr::This) -> R;
-    fn visit_unary_expr(&mut self, expr: &Expr::Unary) -> R;
-    fn visit_variable_expr(&mut self, expr: &Expr::Variable) -> R;
+    fn visit_assign_expr(&mut self, expr: &Expr) -> R;
+    fn visit_binary_expr(&mut self, expr: &Expr) -> R;
+    fn visit_call_expr(&mut self, expr: &Expr) -> R;
+    fn visit_get_expr(&mut self, expr: &Expr) -> R;
+    fn visit_grouping_expr(&mut self, expr: &Expr) -> R;
+    fn visit_literal_expr(&mut self, expr: &Expr) -> R;
+    fn visit_logical_expr(&mut self, expr: &Expr) -> R;
+    fn visit_set_expr(&mut self, expr: &Expr) -> R;
+    fn visit_super_expr(&mut self, expr: &Expr) -> R;
+    fn visit_this_expr(&mut self, expr: &Expr) -> R;
+    fn visit_unary_expr(&mut self, expr: &Expr) -> R;
+    fn visit_variable_expr(&mut self, expr: &Expr) -> R;
 }
 
 impl Expr {
