@@ -25,7 +25,7 @@ public class Scanner {
         return tokens;
     }
 
-    private Token scanToken() {
+    private void scanToken() {
         char c = advance();
         
         switch (c) {
@@ -39,10 +39,60 @@ public class Scanner {
             case '+': addToken(TokenType.PLUS); break;
             case ';': addToken(TokenType.SEMICOLON); break;
             case '*': addToken(TokenType.STAR); break;
+            case '!': 
+                      addToken(matchAdvance('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
+                      break;
+            case '=': 
+                      addToken(matchAdvance('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
+                      break;
+            case '<': 
+                      addToken(matchAdvance('=') ? TokenType.LESS_EQUAL : TokenType.LESS);
+                      break;
+            case '>': 
+                      addToken(matchAdvance('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER);
+                      break;
+            case '/': 
+                      if (matchAdvance('/')) {
+                          while (peek() != '\n' && !isEnd()) {
+                              advance();
+                          }
+                      } else {
+                          addToken(TokenType.SLASH);
+                      }
+                      break;
+            case ' ':
+            case '\t':
+            case '\r':
+                      break;
+            case '\n':
+                      line++;
+                      break;
             default:
-                Lox.error(line, "Unexpected character.");
-                break;
+                      Lox.error(line, "Unexpected character.");
+                      break;
         }
+    }
+
+    private char peek() {
+        if (isEnd()) {
+            return '\0';
+        }
+
+        return source.charAt(current);
+
+    }
+
+    private boolean matchAdvance(char value) {
+        if (isEnd()) {
+            return false;
+        }
+
+        if (source.charAt(current) == value) {
+            current++;
+            return true;
+        }
+
+        return false;
     }
 
     private char advance() {

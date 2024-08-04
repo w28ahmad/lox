@@ -1,27 +1,18 @@
-# Makefile for compiling and running a Java program
+MAIN_CLASS = com.craftinginterpreters.lox.Lox
 
-# Name of the Java source file without the .java extension
-MAIN_CLASS = Lox
-SRC_FILE = src/com/craftinginterpreters/lox/$(MAIN_CLASS).java
-OUT_DIR = out
+
 ARGS = test.lox
 
-# Default target
 all: run
 
-# Target to compile the Java source file
 compile:
-	mkdir -p $(OUT_DIR)
-	javac -d $(OUT_DIR) $(SRC_FILE)
+	mvn compile
 
-# Target to run the compiled Java class
 run: compile
-	java -cp $(OUT_DIR) $(MAIN_CLASS) $(ARGS)
+	mvn exec:java -Dexec.mainClass=$(MAIN_CLASS) -Dexec.args="$(ARGS)"
 
-# Target to clean the output directory
 clean:
-	rm -rf $(OUT_DIR)
+	mvn clean
 
-# Phony targets
 .PHONY: all compile run clean
 
