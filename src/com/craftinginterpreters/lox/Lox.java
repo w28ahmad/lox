@@ -1,3 +1,5 @@
+package com.craftinginterpreters.lox;
+
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,7 +11,7 @@ public class Lox {
 
     private static boolean hadError = false;
     
-    public static void main(String[] args) throws IOException {
+    public static void main(final String[] args) throws IOException {
         if (args.length > 1) {
             System.out.println("Usage: lox <filepath>.lox");
             System.exit(64);
@@ -21,7 +23,7 @@ public class Lox {
     }
 
     private static void runFile(final String filePath) throws IOException {
-        byte[] bytes = Files.readAllBytes(Paths.get(filePath));
+        final byte[] bytes = Files.readAllBytes(Paths.get(filePath));
         run(new String(bytes, Charset.defaultCharset()));
 
         if (hadError) {
@@ -30,11 +32,11 @@ public class Lox {
     }
 
     private static void runPrompt() throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         for (;;) {
             System.out.print(">");
-            String line = reader.readLine();
+            final String line = reader.readLine();
             if (line == null) {
                 return;
             }
@@ -43,7 +45,7 @@ public class Lox {
         }
     }
 
-    private static void run(String in) {
+    private static void run(final String in) {
         System.out.println(in);
     }
 

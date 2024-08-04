@@ -2,7 +2,7 @@
 
 # Name of the Java source file without the .java extension
 MAIN_CLASS = Lox
-SRC_FILE = lox/$(MAIN_CLASS).java
+SRC_FILE = src/com/craftinginterpreters/lox/$(MAIN_CLASS).java
 OUT_DIR = out
 ARGS = test.lox
 
