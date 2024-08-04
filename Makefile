@@ -1,9 +1,10 @@
 # Makefile for compiling and running a Java program
 
 # Name of the Java source file without the .java extension
-MAIN_CLASS = Main
-SRC_FILE = $(MAIN_CLASS).java
+MAIN_CLASS = Lox
+SRC_FILE = lox/$(MAIN_CLASS).java
 OUT_DIR = out
+ARGS = test.lox
 
 # Default target
 all: run
@@ -15,7 +16,7 @@ compile:
 
 # Target to run the compiled Java class
 run: compile
-	java -cp $(OUT_DIR) $(MAIN_CLASS)
+	java -cp $(OUT_DIR) $(MAIN_CLASS) $(ARGS)
 
 # Target to clean the output directory
 clean:
