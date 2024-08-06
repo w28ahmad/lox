@@ -3,6 +3,7 @@ package com.craftinginterpreters.lox;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -46,7 +47,12 @@ public class Lox {
     }
 
     private static void run(final String in) {
-        System.out.println(in);
+        Scanner scanner = new Scanner(in);
+        List<Token> tokens = scanner.scanTokens();
+        
+        for(Token token : tokens) {
+            System.out.println(token);
+        }
     }
 
     static void error(final int line, final String message) {
