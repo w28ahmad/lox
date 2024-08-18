@@ -11,6 +11,9 @@ compile:
 run: compile
 	mvn exec:java -Dexec.mainClass=$(MAIN_CLASS) -Dexec.args="$(ARGS)"
 
+ast:
+	mvn exec:java -Dexec.mainClass=com.craftinginterpreters.lox.tools.GenerateAst -Dexec.args="src/main/java/com/craftinginterpreters/lox"
+
 clean:
 	mvn clean
 
