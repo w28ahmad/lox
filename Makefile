@@ -14,6 +14,10 @@ run: compile
 ast:
 	mvn exec:java -Dexec.mainClass=com.craftinginterpreters.lox.tools.GenerateAst -Dexec.args="src/main/java/com/craftinginterpreters/lox"
 
+prettyPrint:
+	mvn exec:java -Dexec.mainClass=com.craftinginterpreters.lox.AstPrinter
+
+
 clean:
 	mvn clean
 

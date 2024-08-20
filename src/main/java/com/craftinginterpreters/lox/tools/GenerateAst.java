@@ -62,11 +62,11 @@ public class GenerateAst {
     private static void createType(String baseName, String className, String fields, PrintWriter writer) {
         
         writer.println();
-        writer.println("\tclass " + className + " extends " + baseName + " {");
+        writer.println("\tstatic class " + className + " extends " + baseName + " {");
         writer.println();
         // Fields
         for (String field : fields.split(",")) {
-            writer.println("\t\tprivate final " + field.trim() + ";");
+            writer.println("\t\tpublic final " + field.trim() + ";");
         }
         writer.println();
 
