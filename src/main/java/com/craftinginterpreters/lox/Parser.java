@@ -129,8 +129,8 @@ class Parser {
         throw (ParseError) error(peek(), "Expect expression.");
     }
 
-    private void consume(TokenType token, String message) throws ParseError {
-        if (match(token)) advance();
+    private Token consume(TokenType token, String message) throws ParseError {
+        if (check(token)) return advance();
         throw (ParseError) error(peek(), message);
     }
 
